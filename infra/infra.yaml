@@ -1,0 +1,31 @@
+#Reference: https://www.trek10.com/blog/cloudformation-splitting-and-sharing
+Resources:
+  SubstackVPC:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: https://cf-dennis.s3.ap-southeast-1.amazonaws.com/infra/vpc.yaml
+
+  SubstackSubnet:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: https://cf-dennis.s3.ap-southeast-1.amazonaws.com/infra/subnet.yaml
+      Parameters:
+        myVPC: !GetAtt SubstackVPC.Outputs.VPC
+  
+  SubstackSG:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/cf-dennis/infra/sg.yaml
+      Parameters:
+        myVPC: !GetAtt SubstackVPC.Outputs.VPC
+  
+  SubstackRoute:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/cf-dennis/infra/route.yaml
+      Parameters:
+        myVPC: !GetAtt SubstackVPC.Outputs.VPC
+        myPubSubnet1a: !GetAtt SubstackSubnet.Outputs.myPubSubnet1a
+        myPubSubnet1b: !GetAtt SubstackSubnet.Outputs.myPubSubnet1b
+        myPriSubnet1a: !GetAtt SubstackSubnet.Outputs.myPriSubnet1a
+        myPriSubnet1b: !GetAtt SubstackSubnet.Outputs.myPriSubnet1b

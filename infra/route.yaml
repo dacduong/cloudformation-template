@@ -1,0 +1,76 @@
+Parameters:
+  myVPC:
+    Type: String
+    Description: This is VPC Id
+  
+  myPubSubnet1a:
+    Type: String
+    Description: This is myPubSubnet1a Id
+  
+  myPubSubnet1b:
+    Type: String
+    Description: This is myPubSubnet1b Id
+
+  myPriSubnet1a:
+    Type: String
+    Description: This is myPriSubnet1a Id
+  
+  myPriSubnet1b:
+    Type: String
+    Description: This is myPriSubnet1b Id
+
+Resources:
+  myIG:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: stack
+        Value: dev
+
+  gatewayToInternet:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: myVPC
+      InternetGatewayId:
+        Ref: myIG
+ 
+  #Public/Internet route table
+  myInternetRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: myVPC
+      Tags:
+      - Key: stack
+        Value: dev
+
+  myInternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: 
+      - myIG
+      - gatewayToInternet
+    Properties:
+      RouteTableId:
+        Ref: myInternetRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: myIG
+
+  #Public subnet - routes associate
+  myPubSubnet1aRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: myPubSubnet1a
+      RouteTableId:
+        Ref: myInternetRouteTable
+
+  myPubSubnet1bRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        #Ref: myPubSubnet1b
+        "Fn::ImportValue": myPubSubnet1bExport
+      RouteTableId:
+        Ref: myInternetRouteTable

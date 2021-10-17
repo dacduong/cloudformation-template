@@ -1,0 +1,27 @@
+Resources:
+  myNLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      IpAddressType: ipv4
+      #Name: myNLB
+      Scheme: internal
+      #SubnetMappings: 
+      #  - SubnetMapping
+      Subnets: 
+        - subnet-042a168beb8ad7108
+        - subnet-076f53e62930a3d8e
+      Tags:
+        - Key: stack
+          Value: dev
+      Type: network
+
+Outputs:
+  arn:
+    Description: nlb arn
+    Value: !Ref myNLB
+  CanonicalHostedZoneID:
+    Value: !GetAtt myNLB.CanonicalHostedZoneID
+  DNSName:
+    Value: !GetAtt myNLB.DNSName
+  LoadBalancerFullName:
+    Value: !GetAtt myNLB.LoadBalancerFullName

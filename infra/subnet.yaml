@@ -1,0 +1,69 @@
+Parameters:
+  myVPC:
+    Type: String
+    Description: This is VPC Id
+    
+Resources:
+  myPubSubnet1a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: myVPC
+      CidrBlock: 172.16.0.0/24
+      AvailabilityZone: "ap-southeast-1a"
+      Tags:
+      - Key: stack
+        Value: dev
+
+  myPubSubnet1b:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: myVPC
+      CidrBlock: 172.16.1.0/24
+      AvailabilityZone: "ap-southeast-1b"
+      Tags:
+      - Key: stack
+        Value: dev
+
+  myPriSubnet1a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: myVPC
+      CidrBlock: 172.16.2.0/24
+      AvailabilityZone: "ap-southeast-1a"
+      Tags:
+      - Key: stack
+        Value: dev
+
+  myPriSubnet1b:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: myVPC
+      CidrBlock: 172.16.3.0/24
+      AvailabilityZone: "ap-southeast-1b"
+      Tags:
+      - Key: stack
+        Value: dev
+
+Outputs:
+  PublicSubnets:
+    Description: A list of the public subnets
+    Value: !Join [ ",", [ !Ref myPubSubnet1a, !Ref myPubSubnet1b ]]
+
+  PrivateSubnets:
+    Description: A list of the private subnets
+    Value: !Join [ ",", [ !Ref myPriSubnet1a, !Ref myPriSubnet1b ]]
+  
+  myPubSubnet1a:
+    Value: !Ref myPubSubnet1a
+  myPubSubnet1b:
+    Value: !Ref myPubSubnet1b
+    Export:
+      Name: myPubSubnet1bExport
+  myPriSubnet1a:
+    Value: !Ref myPriSubnet1a
+  myPriSubnet1b:
+    Value: !Ref myPriSubnet1b

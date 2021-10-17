@@ -1,0 +1,14 @@
+Resources:
+  myVPCEPS:
+    Type: AWS::EC2::VPCEndpointService
+    Properties: 
+      AcceptanceRequired: false
+      NetworkLoadBalancerArns:
+        #nlb1
+        - arn:aws:elasticloadbalancing:ap-southeast-1:730823443103:loadbalancer/net/nlb1-myNLB-CJTQ2YGSGH2X/a32d4a39aabcbe14
+        #nlb2
+        #- arn:aws:elasticloadbalancing:ap-southeast-1:730823443103:loadbalancer/net/nlb2-myNLB-I0CTYT2HY0G7/bb3a3b85e48ac012
+Outputs:
+  myVPCEPS:
+    Description: VPCEPS Id
+    Value: !Ref myVPCEPS

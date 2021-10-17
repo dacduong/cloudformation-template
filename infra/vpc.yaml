@@ -1,0 +1,15 @@
+Resources:
+  myVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 172.16.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+      - Key: stack
+        Value: dev
+
+Outputs:
+  VPC:
+    Description: A reference to the created VPC
+    Value: !Ref myVPC
